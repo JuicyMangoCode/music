@@ -1,245 +1,153 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>🎧 Music Library</title>
-		<link
-			href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap"
-			rel="stylesheet"
-		/>
-		<style>
-			:root {
-				--primary: #03a9f4;
-				--background: #121212;
-				--surface: #1e1e1e;
-				--text: #ffffff;
-				--text-muted: #bbbbbb;
-				--border: #2a2a2a;
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>🎵 MangoDev Music Host</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background: #1e1e1e;
+			color: #f0f0f0;
+			padding: 20px;
+			max-width: 800px;
+			margin: auto;
+		}
+		h1 {
+			color: #ffcc00;
+			text-align: center;
+		}
+		.search {
+			margin-bottom: 20px;
+			text-align: center;
+		}
+		input[type="text"] {
+			padding: 10px;
+			width: 100%;
+			max-width: 400px;
+			border: none;
+			border-radius: 4px;
+			font-size: 16px;
+		}
+		.file-entry {
+			background: #2e2e2e;
+			padding: 10px;
+			border-radius: 5px;
+			margin: 10px 0;
+			display: flex;
+			flex-direction: column;
+			gap: 5px;
+		}
+		.file-name {
+			font-weight: bold;
+		}
+		.buttons {
+			display: flex;
+			gap: 10px;
+			flex-wrap: wrap;
+		}
+		button {
+			background: #444;
+			color: white;
+			border: none;
+			padding: 5px 10px;
+			border-radius: 3px;
+			cursor: pointer;
+		}
+		button:hover {
+			background: #666;
+		}
+		footer {
+			margin-top: 40px;
+			text-align: center;
+			color: #777;
+		}
+	</style>
+</head>
+<body>
+	<h1>🎵 MangoDev Music Host</h1>
+	<div class="search">
+		<input type="text" id="searchBox" placeholder="Search music..." />
+	</div>
+	<div id="music-list">Loading...</div>
+	<footer>
+		&copy; 2025 <a href="https://mangodev.site" style="color:#ffcc00;">MangoDev</a>
+	</footer>
+
+	<script>
+		const apiUrl =
+			'https://api.github.com/repos/JuicyMangoCode/music/contents/music_assets';
+		const baseRawUrl =
+			'https://raw.githubusercontent.com/JuicyMangoCode/music/main/music_assets/';
+		const directoriesJsonUrl =
+			'https://juicymangocode.github.io/music/directories.json';
+
+		let allFiles = [];
+		let shortenedLinks = {};
+
+		function displayFiles(files) {
+			const container = document.getElementById('music-list');
+			container.innerHTML = '';
+
+			if (files.length === 0) {
+				container.textContent = 'No matching files found.';
+				return;
 			}
 
-			* {
-				box-sizing: border-box;
-			}
+			files.forEach((file) => {
+				const entry = document.createElement('div');
+				entry.className = 'file-entry';
 
-			body {
-				margin: 0;
-				font-family: 'Roboto', sans-serif;
-				background-color: var(--background);
-				color: var(--text);
-				padding: 2rem;
-			}
+				const fileName = atob(file.name.split('.mp3')[0]);
+				const fullUrl = `${baseRawUrl}${file.name}`;
+				const shortUrl =
+					shortenedLinks[file.name]?.short_url || 'Not Found!';
 
-			h1 {
-				font-weight: 600;
-				color: var(--primary);
-				margin-bottom: 1.5rem;
-				font-size: 2rem;
-			}
+				entry.innerHTML = `
+					<div class="file-name">${fileName}</div>
+					<div class="buttons">
+						<button onclick="window.open('${fullUrl}', '_blank')">🎧 Open</button>
+						<button onclick="copyToClipboard('${fullUrl}')">🔗 Copy Full URL</button>
+						<button onclick="copyToClipboard('${shortUrl}')">📋 Copy Shortened</button>
+					</div>
+				`;
 
-			.search-bar {
-				margin-bottom: 2rem;
-			}
-
-			input[type='text'] {
-				width: 100%;
-				padding: 0.75rem 1rem;
-				font-size: 1rem;
-				border-radius: 8px;
-				border: 1px solid var(--border);
-				background-color: var(--surface);
-				color: var(--text);
-				transition: border-color 0.3s ease;
-			}
-
-			input[type='text']:focus {
-				border-color: var(--primary);
-				outline: none;
-			}
-
-			.file-list {
-				display: grid;
-				gap: 1rem;
-			}
-
-			.file-card {
-				background-color: var(--surface);
-				border-radius: 8px;
-				padding: 1rem 1.2rem;
-				transition: background 0.3s ease;
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-			}
-
-			.file-card:hover {
-				background-color: #2a2a2a;
-			}
-
-			.file-name {
-				color: var(--text);
-				font-size: 1rem;
-				font-weight: 500;
-				word-break: break-all;
-			}
-
-			.file-link {
-				text-decoration: none;
-				color: var(--primary);
-				font-size: 0.9rem;
-			}
-
-			.no-results {
-				color: var(--text-muted);
-				font-style: italic;
-			}
-
-			@media (max-width: 600px) {
-				body {
-					padding: 1rem;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<h1>🎧 Music Library</h1>
-
-		<div class="search-bar">
-			<input type="text" id="search" placeholder="Search music..." />
-		</div>
-
-		<div id="music-list" class="file-list">Loading...</div>
-
-		<script>
-			const user = 'JuicyMangoCode';
-			const repo = 'music';
-			const branch = 'main';
-
-			const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/music_assets?ref=${branch}`;
-			const directoriesJsonUrl = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/directories.json`;
-
-			let allFiles = [];
-			let shortenedLinks = {};
-
-			// Fetch the shortened URLs from directories.json
-			fetch(directoriesJsonUrl)
-				.then((res) => res.json())
-				.then((data) => {
-					shortenedLinks = data;
-				})
-				.catch((err) => {
-					console.error('Failed to load directories.json:', err);
-				});
-
-			function displayFiles(files) {
-				const container = document.getElementById('music-list');
-				container.innerHTML = '';
-
-				if (files.length === 0) {
-					container.innerHTML =
-						'<p class="no-results">No matching MP3 files found.</p>';
-					return;
-				}
-
-				files.forEach((file) => {
-					const card = document.createElement('div');
-					card.className = 'file-card';
-
-					const name = document.createElement('div');
-					name.className = 'file-name';
-					name.textContent = file.name;
-
-					const actions = document.createElement('div');
-					actions.style.display = 'flex';
-					actions.style.gap = '0.75rem';
-
-					// OPEN
-					const openLink = document.createElement('a');
-					openLink.className = 'file-link';
-					openLink.href = `https://juicymangocode.github.io/music/music_assets/${file.name}`;
-					openLink.target = '_blank';
-					openLink.rel = 'noopener noreferrer';
-					openLink.textContent = 'Open';
-
-					// COPY FULL LINK
-					const copyLink = document.createElement('a');
-					copyLink.className = 'file-link';
-					copyLink.href = '#';
-					copyLink.textContent = 'Copy';
-					copyLink.onclick = (e) => {
-						e.preventDefault();
-						const fullURL = `https://juicymangocode.github.io/music/music_assets/${file.name}`;
-						navigator.clipboard
-							.writeText(fullURL)
-							.then(() => {
-								copyLink.textContent = 'Copied!';
-								setTimeout(() => (copyLink.textContent = 'Copy'), 2000);
-							})
-							.catch(() => {
-								copyLink.textContent = 'Failed!';
-							});
-					};
-
-					// COPY SHORTENED LINK
-					const copyShortLink = document.createElement('a');
-					copyShortLink.className = 'file-link';
-					copyShortLink.href = '#';
-					copyShortLink.textContent = 'Copy Shortened';
-					copyShortLink.onclick = (e) => {
-						e.preventDefault();
-						const shortURLObj = shortenedLinks[file.name];
-						if (shortURLObj && shortURLObj.short_url) {
-							navigator.clipboard
-								.writeText(shortURLObj.short_url)
-								.then(() => {
-									copyShortLink.textContent = 'Shortened Copied!';
-									setTimeout(
-										() => (copyShortLink.textContent = 'Copy Shortened'),
-										2000
-									);
-								})
-								.catch(() => {
-									copyShortLink.textContent = 'Failed!';
-								});
-						} else {
-							copyShortLink.textContent = 'Not Found!';
-							setTimeout(
-								() => (copyShortLink.textContent = 'Copy Shortened'),
-								2000
-							);
-						}
-					};
-
-					actions.appendChild(openLink);
-					actions.appendChild(copyLink);
-					actions.appendChild(copyShortLink);
-					card.appendChild(name);
-					card.appendChild(actions);
-					container.appendChild(card);
-				});
-			}
-
-			// Load file list
-			fetch(apiUrl)
-				.then((res) => res.json())
-				.then((data) => {
-					allFiles = data.filter((f) => f.name.toLowerCase().endsWith('.mp3'));
-					displayFiles(allFiles);
-				})
-				.catch((err) => {
-					console.error(err);
-					document.getElementById('music-list').textContent =
-						'Failed to load file list.';
-				});
-
-			// Search logic
-			document.getElementById('search').addEventListener('input', function () {
-				const query = this.value.toLowerCase();
-				const filtered = allFiles.filter((file) =>
-					file.name.toLowerCase().includes(query)
-				);
-				displayFiles(filtered);
+				container.appendChild(entry);
 			});
-		</script>
-	</body>
+		}
+
+		function copyToClipboard(text) {
+			navigator.clipboard.writeText(text).then(
+				() => alert('Copied!'),
+				(err) => alert('Failed to copy.')
+			);
+		}
+
+		document.getElementById('searchBox').addEventListener('input', (e) => {
+			const searchTerm = e.target.value.toLowerCase();
+			const filtered = allFiles.filter((file) =>
+				atob(file.name.split('.mp3')[0])
+					.toLowerCase()
+					.includes(searchTerm)
+			);
+			displayFiles(filtered);
+		});
+
+		// Fetch both the file list and the shortened URL mapping
+		Promise.all([
+			fetch(apiUrl).then((res) => res.json()),
+			fetch(directoriesJsonUrl).then((res) => res.json()),
+		])
+			.then(([fileData, shortLinkData]) => {
+				allFiles = fileData.filter((f) => f.name.toLowerCase().endsWith('.mp3'));
+				shortenedLinks = shortLinkData;
+				displayFiles(allFiles);
+			})
+			.catch((err) => {
+				console.error('Failed to load data:', err);
+				document.getElementById('music-list').textContent =
+					'Failed to load file list or shortened URLs.';
+			});
+	</script>
+</body>
 </html>
