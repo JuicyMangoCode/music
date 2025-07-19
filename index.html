@@ -2,33 +2,40 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Music Index</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>🎧 Music Library</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap" rel="stylesheet" />
   <style>
     :root {
-      --primary-color: #2196f3;
-      --background-color: #121212;
-      --surface-color: #1e1e1e;
-      --text-color: #ffffff;
-      --input-bg: #2c2c2c;
-      --input-border: #333;
+      --primary: #03a9f4;
+      --background: #121212;
+      --surface: #1e1e1e;
+      --text: #ffffff;
+      --text-muted: #bbbbbb;
+      --border: #2a2a2a;
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
       margin: 0;
       font-family: 'Roboto', sans-serif;
-      background-color: var(--background-color);
-      color: var(--text-color);
+      background-color: var(--background);
+      color: var(--text);
       padding: 2rem;
     }
 
     h1 {
-      color: var(--primary-color);
-      margin-bottom: 1rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
     }
 
-    .search-container {
-      margin-bottom: 1.5rem;
+    .search-bar {
+      margin-bottom: 2rem;
     }
 
     input[type="text"] {
@@ -36,32 +43,52 @@
       padding: 0.75rem 1rem;
       font-size: 1rem;
       border-radius: 8px;
-      border: 1px solid var(--input-border);
-      background-color: var(--input-bg);
-      color: var(--text-color);
+      border: 1px solid var(--border);
+      background-color: var(--surface);
+      color: var(--text);
+      transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+      border-color: var(--primary);
       outline: none;
     }
 
     .file-list {
-      margin-top: 1rem;
+      display: grid;
+      gap: 1rem;
     }
 
-    .file-item {
-      background-color: var(--surface-color);
-      margin-bottom: 0.5rem;
-      padding: 1rem;
+    .file-card {
+      background-color: var(--surface);
       border-radius: 8px;
-      transition: background-color 0.2s;
+      padding: 1rem 1.2rem;
+      transition: background 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
 
-    .file-item:hover {
+    .file-card:hover {
       background-color: #2a2a2a;
     }
 
-    .file-item a {
-      text-decoration: none;
-      color: var(--primary-color);
+    .file-name {
+      color: var(--text);
+      font-size: 1rem;
       font-weight: 500;
+      word-break: break-all;
+    }
+
+    .file-link {
+      text-decoration: none;
+      color: var(--primary);
+      font-size: 0.9rem;
+    }
+
+    .no-results {
+      color: var(--text-muted);
+      font-style: italic;
     }
 
     @media (max-width: 600px) {
@@ -72,21 +99,19 @@
   </style>
 </head>
 <body>
-  <h1>🎵 Music Library</h1>
+  <h1>🎧 Music Library</h1>
 
-  <div class="search-container">
-    <input type="text" id="search" placeholder="Search MP3 files..." />
+  <div class="search-bar">
+    <input type="text" id="search" placeholder="Search music...">
   </div>
 
-  <div class="file-list" id="music-list">Loading...</div>
+  <div id="music-list" class="file-list">Loading...</div>
 
   <script>
     const user = "JuicyMangoCode";
     const repo = "music";
     const branch = "main";
-
-    const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/?ref=${branch}`;
-
+    const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents?ref=${branch}`;
     let allFiles = [];
 
     function displayFiles(files) {
@@ -94,15 +119,28 @@
       container.innerHTML = "";
 
       if (files.length === 0) {
-        container.innerHTML = "<p>No matching MP3 files found.</p>";
+        container.innerHTML = '<p class="no-results">No matching MP3 files found.</p>';
         return;
       }
 
       files.forEach(file => {
-        const item = document.createElement("div");
-        item.className = "file-item";
-        item.innerHTML = `<a href="${file.download_url}" target="_blank">${file.name}</a>`;
-        container.appendChild(item);
+        const card = document.createElement("div");
+        card.className = "file-card";
+
+        const name = document.createElement("div");
+        name.className = "file-name";
+        name.textContent = file.name;
+
+        const link = document.createElement("a");
+        link.className = "file-link";
+        link.href = file.html_url;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+        link.textContent = "Open";
+
+        card.appendChild(name);
+        card.appendChild(link);
+        container.appendChild(card);
       });
     }
 
