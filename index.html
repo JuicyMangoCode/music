@@ -187,10 +187,10 @@
 					copyShortLink.textContent = 'Copy Shortened';
 					copyShortLink.onclick = (e) => {
 						e.preventDefault();
-						const shortURL = shortenedLinks[file.name];
-						if (shortURL) {
+						const shortURLObj = shortenedLinks[file.name];
+						if (shortURLObj && shortURLObj.short_url) {
 							navigator.clipboard
-								.writeText(shortURL)
+								.writeText(shortURLObj.short_url)
 								.then(() => {
 									copyShortLink.textContent = 'Shortened Copied!';
 									setTimeout(
