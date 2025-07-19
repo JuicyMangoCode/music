@@ -2,7 +2,7 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>🎧 Music Library</title>
 		<link
 			href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&display=swap"
@@ -61,7 +61,7 @@
 				display: grid;
 				gap: 1rem;
 			}
-
+			
 			.file-card {
 				background-color: var(--surface);
 				border-radius: 8px;
@@ -87,6 +87,7 @@
 				text-decoration: none;
 				color: var(--primary);
 				font-size: 0.9rem;
+				cursor: pointer;
 			}
 
 			.no-results {
@@ -117,7 +118,25 @@
 			const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/music_assets?ref=${branch}`;
 			let allFiles = [];
 
-			function displayFiles(files) {
+			// Fetch latest commit message for a file and extract SHORT_URL
+			async function fetchShortUrlForFile(filename) {
+				const commitsApi = `https://api.github.com/repos/${user}/${repo}/commits?path=music_assets/${filename}&sha=${branch}`;
+				try {
+					const res = await fetch(commitsApi);
+					if (!res.ok) return null;
+					const commits = await res.json();
+					if (!Array.isArray(commits) || commits.length === 0) return null;
+
+					const commitMessage = commits[0]?.commit?.message || '';
+					const match = commitMessage.match(/SHORT_URL:\s*(https?:\/\/\S+)/);
+					if (match) return match[1];
+				} catch {
+					return null;
+				}
+				return null;
+			}
+
+			async function displayFiles(files) {
 				const container = document.getElementById('music-list');
 				container.innerHTML = '';
 
@@ -127,10 +146,10 @@
 					return;
 				}
 
-				files.forEach((file) => {
+				for (const file of files) {
 					const card = document.createElement('div');
 					card.className = 'file-card';
-  
+
 					const name = document.createElement('div');
 					name.className = 'file-name';
 					name.textContent = file.name;
@@ -139,9 +158,12 @@
 					actions.style.display = 'flex';
 					actions.style.gap = '0.75rem';
 
+					const fullUrl = `https://${user}.github.io/${repo}/music_assets/${file.name}`;
+					const shortUrl = await fetchShortUrlForFile(file.name);
+
 					const openLink = document.createElement('a');
 					openLink.className = 'file-link';
-					openLink.href = `https://juicymangocode.github.io/music/music_assets/${file.name}`;
+					openLink.href = shortUrl || fullUrl;
 					openLink.target = '_blank';
 					openLink.rel = 'noopener noreferrer';
 					openLink.textContent = 'Open';
@@ -152,9 +174,9 @@
 					copyLink.textContent = 'Copy';
 					copyLink.onclick = (e) => {
 						e.preventDefault();
-						const fullURL = `https://juicymangocode.github.io/music/music_assets/${file.name}`;
+						const textToCopy = shortUrl || fullUrl;
 						navigator.clipboard
-							.writeText(fullURL)
+							.writeText(textToCopy)
 							.then(() => {
 								copyLink.textContent = 'Copied!';
 								setTimeout(() => {
@@ -171,14 +193,14 @@
 					card.appendChild(name);
 					card.appendChild(actions);
 					container.appendChild(card);
-				});
+				}
 			}
 
 			fetch(apiUrl)
 				.then((res) => res.json())
-				.then((data) => {
+				.then(async (data) => {
 					allFiles = data.filter((f) => f.name.toLowerCase().endsWith('.mp3'));
-					displayFiles(allFiles);
+					await displayFiles(allFiles);
 				})
 				.catch((err) => {
 					console.error(err);
