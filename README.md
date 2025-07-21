@@ -5,7 +5,7 @@
 
 # 🎵 Music Assets for GMod `sound.PlayURL`
 
-This repository serves as a dedicated **MP3 hosting hub** for use with [`sound.PlayURL`](https://wiki.facepunch.com/gmod/sound.PlayURL) in **Garry's Mod**. All files are hosted via **GitHub Pages** for fast, direct, and reliable client-side streaming.
+This repository serves as a dedicated **ogg hosting hub** for use with [`sound.PlayURL`](https://wiki.facepunch.com/gmod/sound.PlayURL) in **Garry's Mod**. All files are hosted via **GitHub Pages** for fast, direct, and reliable client-side streaming.
 
 ---
 
@@ -14,7 +14,7 @@ This repository serves as a dedicated **MP3 hosting hub** for use with [`sound.P
 A custom Python automation pipeline handles:
 
 1. **Downloading** audio from YouTube via `yt_dlp`
-2. **Converting** to `.mp3`
+2. **Converting** to `.ogg`
 3. **Base64-encoding** filenames to ensure uniqueness and URL safety
 4. **Uploading** to this GitHub repository under `music_assets/` via the GitHub API
 5. **Generating shortened URLs** via TinyURL and saving them in `directories.json`
@@ -23,8 +23,8 @@ A custom Python automation pipeline handles:
 
 ## 📁 File Structure
 <pre>music/
-├── music_assets/ # MP3 files with base64-encoded names
-│   └── <base64_encoded_name>.mp3
+├── music_assets/ # ogg files with base64-encoded names
+│   └── <base64_encoded_name>.ogg
 ├── index.html
 ├── directories.json # Maps filenames to TinyURLs
 ├── README.md</pre>
@@ -36,7 +36,7 @@ A custom Python automation pipeline handles:
 
 A responsive and styled HTML frontend is included, allowing users to:
 
-- 🔎 **Search** all uploaded `.mp3` files
+- 🔎 **Search** all uploaded `.ogg` files
 - 🔗 **Open** audio files in a new tab
 - 📋 **Copy** either the full direct URL or a **shortened TinyURL** for easy sharing or usage
 - ✅ View-friendly on desktop and mobile
@@ -58,5 +58,5 @@ sound.PlayURL("https://tinyurl.com/example123", "", function(station)
     end
 end)
 ```
-⚠️ Use shortened URLs only if they resolve to direct MP3 files. GMod requires the URL to point directly to a playable audio resource.
+⚠️ Use shortened URLs only if they resolve to direct ogg files. GMod requires the URL to point directly to a playable audio resource.
 
