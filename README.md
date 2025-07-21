@@ -21,17 +21,6 @@ A custom Python automation pipeline handles:
 
 ---
 
-## 📁 File Structure
-<pre>music/
-├── music_assets/ # ogg files with base64-encoded names
-│   └── <base64_encoded_name>.ogg
-├── index.html
-├── directories.json # Maps filenames to TinyURLs
-├── README.md</pre>
-
-
----
-
 ## 🖥️ Web Interface
 
 A responsive and styled HTML frontend is included, allowing users to:
