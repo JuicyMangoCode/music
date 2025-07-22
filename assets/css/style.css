@@ -99,79 +99,6 @@ body::before {
 	transform: scale(1.02);
 }
 
-.file-card {
-  margin-bottom: 18px;
-  padding: 16px 20px;
-  background: linear-gradient(135deg, #3c2e0cbb, #2a1e0500);
-  border-radius: 14px;
-  box-shadow:
-    0 4px 12px rgba(240, 182, 106, 0.15),
-    inset 0 0 12px #f0b66a33;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  user-select: none;
-}
-
-.file-card:hover,
-.file-card:focus-visible {
-  background: linear-gradient(135deg, #f0b66a88, #c68f4877);
-  box-shadow:
-    0 6px 18px rgba(240, 182, 106, 0.7),
-    inset 0 0 16px #f0b66aaa;
-  outline: none;
-}
-
-.file-name {
-  flex: 1;
-  font-weight: 600;
-  font-size: 1.15rem;
-  color: #f0b66a;
-  letter-spacing: 0.02em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  user-select: text;
-}
-
-.file-actions {
-  display: flex;
-  gap: 12px;
-  margin-left: 20px;
-  flex-shrink: 0;
-}
-
-.file-link {
-  color: #f0b66a;
-  font-weight: 500;
-  font-size: 0.9rem;
-  text-decoration: none;
-  padding: 6px 12px;
-  border-radius: 30px;
-  border: 1.5px solid transparent;
-  background-color: #3c2e0cbb;
-  box-shadow: 0 0 6px #f0b66a55;
-  transition:
-    background-color 0.3s ease,
-    color 0.3s ease,
-    border-color 0.3s ease,
-    box-shadow 0.3s ease;
-  user-select: none;
-}
-
-.file-link:hover,
-.file-link:focus-visible {
-  background-color: #f0b66a;
-  color: #1a1a1a;
-  border-color: #c68f48;
-  box-shadow:
-    0 0 10px #f0b66aaa,
-    0 0 16px #c68f48cc;
-  outline: none;
-}
-
 audio {
 	width: 100%;
 	margin-top: 6px;
@@ -179,6 +106,53 @@ audio {
 	border-radius: 6px;
 	background-color: #111;
 }
+
+#music-list {
+  margin-top: 2rem;
+}
+
+.file-card {
+  background: #1e1e1e;
+  padding: 1rem;
+  border-radius: 10px;
+  margin-bottom: 1rem;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.file-card:hover {
+  background: #2a2a2a;
+}
+
+.file-name {
+  font-weight: bold;
+  font-size: 1rem;
+  color: #ffcc66;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 70%;
+}
+
+.file-actions a {
+  color: #8cc9ff;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.file-actions a:hover {
+  text-decoration: underline;
+}
+
+.error {
+  color: red;
+  padding: 1rem;
+  font-weight: bold;
+}
+
 
 footer {
 	position: fixed;
