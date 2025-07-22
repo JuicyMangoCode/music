@@ -63,5 +63,5 @@ end)
 ```
 ---
 
-❤️ Special Thanks
+## ❤️ Special Thanks
 To the open-source community, contributors, and the GMod development scene for keeping Lua weird and wonderful.
