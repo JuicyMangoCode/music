@@ -203,7 +203,6 @@ footer {
 #music-list {
   max-height: calc(100vh - 260px); /* header + footer padding buffer */
   overflow-y: auto;
-  width: 100%;
   padding: 0 24px;
   scroll-behavior: smooth;
   display: flex;
