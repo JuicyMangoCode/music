@@ -56,7 +56,7 @@ function displayFiles(files) {
     openLink.href = shortURL || fullURL;
     openLink.target = '_blank';
     openLink.rel = 'noopener noreferrer';
-    openLink.textContent = shortURL ? 'Open Shortened' : 'Open';
+    openLink.textContent = 'Open';
 
     const copyLink = document.createElement('a');
     copyLink.className = 'file-link';
