@@ -1,3 +1,31 @@
+const user = 'JuicyMangoCode';
+const repo = 'music';
+const branch = 'main';
+const baseURL = `https://${user}.github.io/${repo}/music_assets/`;
+const directoriesJsonUrl = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/directories.json`;
+
+let allFiles = [];
+let shortenedLinks = {};
+
+fetch(directoriesJsonUrl)
+  .then((res) => res.json())
+  .then((data) => {
+    shortenedLinks = data;
+
+    // Convert directories.json into an array of file-like objects
+    allFiles = Object.entries(data).map(([filename, meta]) => ({
+      name: filename,
+      title: meta.title || filename,
+      short_url: meta.short_url || null,
+    }));
+
+    displayFiles(allFiles);
+  })
+  .catch((err) => {
+    console.error('Failed to load directories.json:', err);
+    document.getElementById('music-list').textContent = 'Failed to load file list.';
+  });
+
 function displayFiles(files) {
   const container = document.getElementById('music-list');
   container.innerHTML = '';
@@ -10,20 +38,18 @@ function displayFiles(files) {
   files.forEach((file) => {
     const card = document.createElement('div');
     card.className = 'file-card';
-    card.tabIndex = 0; // accessibility
+    card.tabIndex = 0;
 
     const name = document.createElement('div');
     name.className = 'file-name';
     name.title = file.name;
-
-    const meta = shortenedLinks[file.name];
-    name.textContent = meta?.title || file.name;
+    name.textContent = file.title;
 
     const actions = document.createElement('div');
     actions.className = 'file-actions';
 
-    const fullURL = `https://juicymangocode.github.io/music/music_assets/${file.name}`;
-    const shortURL = meta?.short_url;
+    const fullURL = baseURL + file.name;
+    const shortURL = file.short_url;
 
     const openLink = document.createElement('a');
     openLink.className = 'file-link';
@@ -74,3 +100,11 @@ function displayFiles(files) {
     container.appendChild(card);
   });
 }
+
+document.getElementById('search').addEventListener('input', function () {
+  const query = this.value.toLowerCase();
+  const filtered = allFiles.filter((file) =>
+    file.name.toLowerCase().includes(query) || (file.title && file.title.toLowerCase().includes(query))
+  );
+  displayFiles(filtered);
+});
