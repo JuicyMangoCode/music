@@ -209,20 +209,23 @@ footer {
 }
 
 /* Responsive */
-@media (max-width: 600px) {
-	h1 {
-		font-size: clamp(2rem, 10vw, 4rem);
-	}
-	h1::after {
-		width: 30px;
-		height: 2.5px;
-	}
-	footer {
-		gap: 20px;
-	}
-	.social-link {
-		font-size: 2rem;
-	}
+
+@media (max-width: 480px) {
+  .file-card {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .file-actions {
+    margin-left: 0;
+    margin-top: 8px;
+    width: 100%;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+  .file-link {
+    flex: 1;
+    text-align: center;
+  }
 }
 
 @keyframes glowPulse {
