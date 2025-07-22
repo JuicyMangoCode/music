@@ -200,6 +200,28 @@ footer {
 	filter: drop-shadow(0 0 3px #c68f48aa);
 }
 
+#music-list {
+  max-height: calc(100vh - 260px); /* header + footer padding buffer */
+  overflow-y: auto;
+  width: 100%;
+  padding: 0 24px;
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+#music-list::-webkit-scrollbar {
+  width: 10px;
+}
+#music-list::-webkit-scrollbar-thumb {
+  background: #f0b66a88;
+  border-radius: 6px;
+}
+#music-list::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
 .social-link:hover,
 .social-link:focus {
 	color: #d18f2a;
@@ -209,6 +231,19 @@ footer {
 }
 
 /* Responsive */
+
+@media (max-width: 768px) {
+  .file-name {
+    font-size: 1rem;
+  }
+  .file-link {
+    font-size: 0.8rem;
+    padding: 4px 10px;
+  }
+  #music-list {
+    padding: 0 12px;
+  }
+}
 
 @media (max-width: 480px) {
   .file-card {
