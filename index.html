@@ -1,60 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<title>🎧 Mango's Music Library</title>
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>🎧 Mango's Music Library</title>
 
-		<link rel="stylesheet" href="assets/css/style.css">
+	<link rel="stylesheet" href="assets/css/style.css">
 
-		<link
-			href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
-			rel="stylesheet"
+	<link
+		href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap"
+		rel="stylesheet"
+	/>
+	<link
+		href="https://fonts.googleapis.com/icon?family=Material+Icons"
+		rel="stylesheet"
+	/>
+</head>
+<body>
+	<div class="title-container" role="banner" aria-label="Music Library">
+		<h1>🎧 Mango's Music Library</h1>
+	</div>
+
+	<div class="search-bar">
+		<input
+			type="text"
+			id="search"
+			placeholder="Search music..."
+			autocomplete="off"
+			aria-label="Search music"
 		/>
-		<link
-			href="https://fonts.googleapis.com/icon?family=Material+Icons"
-			rel="stylesheet"
-		/>
-	</head>
-	<body>
-		<div class="title-container" role="banner" aria-label="Music Library">
-			<h1>🎧 Mango's Music Library</h1>
-		</div>
+	</div>
 
-		<div class="search-bar">
-			<input
-				type="text"
-				id="search"
-				placeholder="Search music..."
-				autocomplete="off"
-			/>
-		</div>
+	<div id="music-list" class="file-list">Loading...</div>
 
-		<div id="music-list" class="file-list">Loading...</div>
+	<footer>
+		<a
+			class="social-link"
+			href="https://steamcommunity.com/id/mango--_/"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label="Steam Profile"
+			title="Steam"
+		>
+			<span class="material-icons">sports_esports</span>
+		</a>
+		<a
+			class="social-link"
+			href="https://github.com/JuicyMangoCode"
+			target="_blank"
+			rel="noopener noreferrer"
+			aria-label="GitHub Profile"
+			title="GitHub"
+		>
+			<span class="material-icons">code</span>
+		</a>
+	</footer>
 
-		<footer>
-			<a
-				class="social-link"
-				href="https://steamcommunity.com/id/mango--_/"
-				target="_blank"
-				rel="noopener noreferrer"
-				aria-label="Steam Profile"
-				title="Steam"
-			>
-				<span class="material-icons">sports_esports</span>
-			</a>
-			<a
-				class="social-link"
-				href="https://github.com/JuicyMangoCode"
-				target="_blank"
-				rel="noopener noreferrer"
-				aria-label="GitHub Profile"
-				title="GitHub"
-			>
-				<span class="material-icons">code</span>
-			</a>
-		</footer>
-
-		<script src="assets/js/main.js"></script>
-	</body>
+	<script src="assets/js/main.js"></script>
+</body>
 </html>
