@@ -201,7 +201,7 @@ footer {
 }
 
 #music-list {
-  height: 350px
+  height: 350px;
   overflow-y: auto;
   padding: 0 24px;
   scroll-behavior: smooth;
