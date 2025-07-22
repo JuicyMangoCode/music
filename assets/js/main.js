@@ -1,22 +1,3 @@
-const user = 'JuicyMangoCode';
-const repo = 'music';
-const branch = 'main';
-
-const apiUrl = `https://api.github.com/repos/${user}/${repo}/contents/music_assets?ref=${branch}`;
-const directoriesJsonUrl = `https://raw.githubusercontent.com/${user}/${repo}/${branch}/directories.json`;
-
-let allFiles = [];
-let shortenedLinks = {};
-
-fetch(directoriesJsonUrl)
-	.then((res) => res.json())
-	.then((data) => {
-		shortenedLinks = data;
-	})
-	.catch((err) => {
-		console.error('Failed to load directories.json:', err);
-	});
-
 function displayFiles(files) {
   const container = document.getElementById('music-list');
   container.innerHTML = '';
@@ -29,24 +10,27 @@ function displayFiles(files) {
   files.forEach((file) => {
     const card = document.createElement('div');
     card.className = 'file-card';
-    card.tabIndex = 0; // make keyboard focusable
+    card.tabIndex = 0; // accessibility
 
     const name = document.createElement('div');
     name.className = 'file-name';
     name.title = file.name;
-    name.textContent = file.name;
+
+    const meta = shortenedLinks[file.name];
+    name.textContent = meta?.title || file.name;
 
     const actions = document.createElement('div');
     actions.className = 'file-actions';
 
     const fullURL = `https://juicymangocode.github.io/music/music_assets/${file.name}`;
+    const shortURL = meta?.short_url;
 
     const openLink = document.createElement('a');
     openLink.className = 'file-link';
-    openLink.href = fullURL;
+    openLink.href = shortURL || fullURL;
     openLink.target = '_blank';
     openLink.rel = 'noopener noreferrer';
-    openLink.textContent = 'Open';
+    openLink.textContent = shortURL ? 'Open Shortened' : 'Open';
 
     const copyLink = document.createElement('a');
     copyLink.className = 'file-link';
@@ -68,9 +52,8 @@ function displayFiles(files) {
     copyShortLink.textContent = 'Copy Shortened';
     copyShortLink.onclick = (e) => {
       e.preventDefault();
-      const shortURLObj = shortenedLinks[file.name];
-      if (shortURLObj && shortURLObj.short_url) {
-        navigator.clipboard.writeText(shortURLObj.short_url).then(() => {
+      if (shortURL) {
+        navigator.clipboard.writeText(shortURL).then(() => {
           copyShortLink.textContent = 'Shortened Copied!';
           setTimeout(() => (copyShortLink.textContent = 'Copy Shortened'), 2000);
         }).catch(() => {
@@ -91,27 +74,3 @@ function displayFiles(files) {
     container.appendChild(card);
   });
 }
-
-// Load file list
-fetch(apiUrl)
-	.then((res) => res.json())
-	.then((data) => {
-		allFiles = data.filter((f) => {
-			const name = f.name.toLowerCase();
-			return name.endsWith('.mp3') || name.endsWith('.ogg');
-		});
-		displayFiles(allFiles);
-	})
-	.catch((err) => {
-		console.error(err);
-		document.getElementById('music-list').textContent = 'Failed to load file list.';
-	});
-
-// Search logic
-document.getElementById('search').addEventListener('input', function () {
-	const query = this.value.toLowerCase();
-	const filtered = allFiles.filter((file) =>
-		file.name.toLowerCase().includes(query)
-	);
-	displayFiles(filtered);
-});
