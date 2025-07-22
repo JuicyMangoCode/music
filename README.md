@@ -1,45 +1,59 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![GitHub last commit](https://img.shields.io/github/last-commit/JuicyMangoCode/music)](https://github.com/JuicyMangoCode/music/commits/main)
-[![GitHub repo size](https://img.shields.io/github/repo-size/JuicyMangoCode/music)](https://github.com/JuicyMangoCode/music)
-[![GitHub issues](https://img.shields.io/github/issues/JuicyMangoCode/music)](https://github.com/JuicyMangoCode/music/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/JuicyMangoCode/music?color=blue)](https://github.com/JuicyMangoCode/music/commits/main)
+[![Repo Size](https://img.shields.io/github/repo-size/JuicyMangoCode/music?color=orange)](https://github.com/JuicyMangoCode/music)
+[![Issues](https://img.shields.io/github/issues/JuicyMangoCode/music?color=purple)](https://github.com/JuicyMangoCode/music/issues)
 
-# 🎵 Music Assets for GMod `sound.PlayURL`
+# 🎵 JuicyMango GMod Music Assets
 
-This repository serves as a dedicated **ogg hosting hub** for use with [`sound.PlayURL`](https://wiki.facepunch.com/gmod/sound.PlayURL) in **Garry's Mod**. All files are hosted via **GitHub Pages** for fast, direct, and reliable client-side streaming.
+A modern and automated repository for hosting `.ogg` music files used with [`sound.PlayURL`](https://wiki.facepunch.com/gmod/sound.PlayURL) in **Garry's Mod**. All files are streamed directly from **GitHub Pages**, ensuring fast, reliable playback in-game.
+
+> Powered by a dynamic backend and streamlined developer tools.
+
+---
+
+## 🌐 Live Demo
+
+**Website:**  
+🔗 [https://juicymangocode.github.io/music/](https://juicymangocode.github.io/music/)
+
+**Backend Upload Server:**  
+🔗 [`https://90fa39d8-...replit.dev/`](https://90fa39d8-1c84-4210-a37d-b8ac10d057eb-00-1r97ja0zizqg4.pike.replit.dev/)
 
 ---
 
 ## ⚙️ How It Works
 
-A custom Python automation pipeline handles:
+The full pipeline is powered by a custom Node.js + Express backend:
 
-1. **Downloading** audio from YouTube via `yt_dlp`
-2. **Converting** to `.ogg`
-3. **Base64-encoding** filenames to ensure uniqueness and URL safety
-4. **Uploading** to this GitHub repository under `music_assets/` via the GitHub API
-5. **Generating shortened URLs** via TinyURL and saving them in `directories.json`
+1. 🎥 **Download Audio** from YouTube using `yt-dlp`
+2. 🔄 **Convert** to `.ogg` using `ffmpeg`
+3. 🧠 **Intelligently Rename** with sanitized and conflict-free filenames
+4. 📉 **Compress if Necessary** to meet streaming size requirements
+5. 🚀 **Upload to GitHub** via the GitHub API (`music_assets/` folder)
+6. 🔗 **Shorten URLs** using the TinyURL API
+7. 📁 **Track Metadata** in `directories.json` for easy retrieval
 
----
-
-## 🖥️ Web Interface
-
-A responsive and styled HTML frontend is included, allowing users to:
-
-- 🔎 **Search** all uploaded `.ogg` files
-- 🔗 **Open** audio files in a new tab
-- 📋 **Copy** either the full direct URL or a **shortened TinyURL** for easy sharing or usage
-- ✅ View-friendly on desktop and mobile
-
-**Live site:**  
-👉 [https://juicymangocode.github.io/music/](https://juicymangocode.github.io/music/)
+All uploads are dynamically managed, with built-in locking to prevent API spam or concurrent conflicts.
 
 ---
 
-## 🎮 Usage in Garry's Mod
+## 🖥️ Web Interface Features
 
-To stream audio in GMod using Lua, use the `sound.PlayURL` function:
+The frontend provides a clean, responsive UI:
 
-### Full URL Example:
+- 🔍 **Searchable Audio List**
+- 🎧 **Preview** any track directly in-browser
+- 🔗 **Copy Full or Shortened URL**
+- 📱 **Mobile-Friendly Design**
+- 🧠 **Backed by `directories.json` metadata index**
+
+> The site is automatically updated when new tracks are uploaded.
+
+---
+
+## 🎮 Using Audio in GMod
+
+### Basic Lua Example
 ```lua
 sound.PlayURL("https://tinyurl.com/example123", "", function(station)
     if (IsValid(station)) then
@@ -47,5 +61,13 @@ sound.PlayURL("https://tinyurl.com/example123", "", function(station)
     end
 end)
 ```
-⚠️ Use shortened URLs only if they resolve to direct ogg files. GMod requires the URL to point directly to a playable audio resource.
+---
 
+🔐 Secure & Smart Uploads
+🧩 Uploads are blocked while one is in progress
+✅ Filename deduplication and TinyURL reuse for existing files
+🔐 .env-based secret management for API tokens
+🚫 Automatically rejects malformed YouTube links
+
+❤️ Special Thanks
+To the open-source community, contributors, and the GMod development scene for keeping Lua weird and wonderful.
