@@ -63,11 +63,5 @@ end)
 ```
 ---
 
-🔐 Secure & Smart Uploads
-🧩 Uploads are blocked while one is in progress
-✅ Filename deduplication and TinyURL reuse for existing files
-🔐 .env-based secret management for API tokens
-🚫 Automatically rejects malformed YouTube links
-
 ❤️ Special Thanks
 To the open-source community, contributors, and the GMod development scene for keeping Lua weird and wonderful.
