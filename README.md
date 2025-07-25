@@ -17,7 +17,7 @@ A modern and automated repository for hosting `.ogg` music files used with [`sou
 🔗 [https://juicymangocode.github.io/music/](https://juicymangocode.github.io/music/)
 
 **Backend Upload Server:**  
-🔗 [`https://90fa39d8-...replit.dev/`](https://90fa39d8-1c84-4210-a37d-b8ac10d057eb-00-1r97ja0zizqg4.pike.replit.dev/)
+🔗 https://mango-music-service.willard.network/
 
 ---
 
